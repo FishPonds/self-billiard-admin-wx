@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfUserRoleMapper">
+
+	<resultMap type="SelfUserRole" id="SelfUserRoleResult">
+		<result property="selfUserId"     column="self_user_id"      />
+		<result property="selfRoleId"     column="self_role_id"      />
+	</resultMap>
+
+	<select id="selectSelfUserRoleBySelfUserId" parameterType="Long" resultMap="SelfUserRoleResult">
+		select self_user_id, self_role_id from self_user_role where self_user_id = #{selfUserId}
+	</select>
+
+</mapper> 

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfStorePhotoAlbumMapper">
+
+    <resultMap type="SelfStorePhotoAlbum" id="SelfStorePhotoAlbumResult">
+        <result property="albumId" column="album_id"/>
+        <result property="albumName" column="album_name"/>
+        <result property="storeId" column="store_id"/>
+        <result property="storeKey" column="store_key"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSelfStorePhotoAlbumVo">
+        select album_id,
+               album_name,
+               store_id,
+               store_key,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+        from self_store_photo_album
+    </sql>
+
+    <select id="selectSelfStorePhotoAlbumList" parameterType="SelfStorePhotoAlbum"
+            resultMap="SelfStorePhotoAlbumResult">
+        <include refid="selectSelfStorePhotoAlbumVo"/>
+        <where>
+            <if test="albumName != null  and albumName != ''">and album_name like concat('%', #{albumName}, '%')</if>
+            <if test="storeId != null ">and store_id = #{storeId}</if>
+            <if test="storeKey != null  and storeKey != ''">and store_key = #{storeKey}</if>
+        </where>
+    </select>
+
+    <select id="selectSelfStorePhotoAlbumByAlbumId" parameterType="Long" resultMap="SelfStorePhotoAlbumResult">
+        <include refid="selectSelfStorePhotoAlbumVo"/>
+        where album_id = #{albumId}
+    </select>
+
+    <insert id="insertSelfStorePhotoAlbum" parameterType="SelfStorePhotoAlbum" useGeneratedKeys="true"
+            keyProperty="albumId">
+        insert into self_store_photo_album
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="albumName != null and albumName != ''">album_name,</if>
+            <if test="storeId != null">store_id,</if>
+            <if test="storeKey != null and storeKey != ''">store_key,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="albumName != null and albumName != ''">#{albumName},</if>
+            <if test="storeId != null">#{storeId},</if>
+            <if test="storeKey != null and storeKey != ''">#{storeKey},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelfStorePhotoAlbum" parameterType="SelfStorePhotoAlbum">
+        update self_store_photo_album
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="albumName != null and albumName != ''">album_name = #{albumName},</if>
+            <if test="storeId != null">store_id = #{storeId},</if>
+            <if test="storeKey != null and storeKey != ''">store_key = #{storeKey},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where album_id = #{albumId}
+    </update>
+
+    <delete id="deleteSelfStorePhotoAlbumByAlbumId" parameterType="Long">
+        delete
+        from self_store_photo_album
+        where album_id = #{albumId}
+    </delete>
+
+    <delete id="deleteSelfStorePhotoAlbumByAlbumIds" parameterType="String">
+        delete from self_store_photo_album where album_id in
+        <foreach item="albumId" collection="array" open="(" separator="," close=")">
+            #{albumId}
+        </foreach>
+    </delete>
+
+    <select id="selectSelfStorePhotoAlbumListByStoreId" parameterType="java.util.List" resultType="SelfStorePhotoAlbum">
+        <include refid="selectSelfStorePhotoAlbumVo"/>
+        WHERE store_id IN
+        <foreach collection="storeIds" item="storeId" open="(" separator="," close=")">
+            #{storeId}
+        </foreach>
+    </select>
+</mapper>

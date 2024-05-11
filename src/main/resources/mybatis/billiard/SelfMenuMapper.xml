@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfMenuMapper">
+
+    <resultMap type="SelfMenu" id="SelfMenuResult">
+        <result property="selfMenuId" column="self_menu_id"/>
+        <result property="selfMenuName" column="self_menu_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="parentName" column="parent_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="url" column="url"/>
+        <result property="target" column="target"/>
+        <result property="menuType" column="menu_type"/>
+        <result property="visible" column="visible"/>
+        <result property="isRefresh" column="is_refresh"/>
+        <result property="perms" column="perms"/>
+        <result property="icon" column="icon"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSelfMenuVo">
+        select self_menu_id,
+               self_menu_name,
+               parent_id,
+               parent_name,
+               order_num,
+               url,
+               target,
+               menu_type,
+               visible,
+               is_refresh,
+               perms,
+               icon,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from self_menu
+    </sql>
+
+    <sql id="selectSelfMenuVoDISTINCT">
+        select distinct m.self_menu_id,
+                        m.self_menu_name,
+                        m.parent_id,
+                        m.parent_name,
+                        m.order_num,
+                        m.url,
+                        m.target,
+                        m.menu_type,
+                        m.visible,
+                        m.is_refresh,
+                        m.perms,
+                        m.icon,
+                        m.status,
+                        m.create_by,
+                        m.create_time,
+                        m.update_by,
+                        m.update_time,
+                        m.remark
+        from self_menu m
+    </sql>
+
+    <select id="selectSelfMenuList" parameterType="SelfMenu" resultMap="SelfMenuResult">
+        <include refid="selectSelfMenuVo"/>
+        <where>
+            <if test="selfMenuName != null  and selfMenuName != ''">and self_menu_name like concat('%', #{selfMenuName},
+                '%')
+            </if>
+            <if test="parentId != null ">and parent_id = #{parentId}</if>
+            <if test="orderNum != null ">and order_num = #{orderNum}</if>
+            <if test="isRefresh != null ">and is_refresh = #{isRefresh}</if>
+            <if test="menuType != null  and menuType != ''">and menu_type = #{menuType}</if>
+            <if test="visible != null  and visible != ''">and visible = #{visible}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="perms != null  and perms != ''">and perms = #{perms}</if>
+            <if test="icon != null  and icon != ''">and icon = #{icon}</if>
+            <if test="url != null  and url != ''">and url = #{url}</if>
+            <if test="target != null  and target != ''">and target = #{target}</if>
+        </where>
+    </select>
+
+    <select id="selectSelfMenuBySelfMenuId" parameterType="Long" resultMap="SelfMenuResult">
+        <include refid="selectSelfMenuVo"/>
+        where self_menu_id = #{selfMenuId}
+    </select>
+
+    <select id="selectPermsBySelfUserId" parameterType="Long" resultType="String">
+        SELECT DISTINCT m.perms
+        FROM self_menu m
+                 LEFT JOIN self_role_menu rm ON m.self_menu_id = rm.self_menu_id
+                 LEFT JOIN self_user_role ur ON rm.self_role_id = ur.self_role_id
+                 LEFT JOIN self_role r ON r.self_role_id = ur.self_role_id
+        WHERE m.visible = '0'
+          AND r.STATUS = '0'
+          AND ur.self_user_id = #{selfUserId}
+    </select>
+
+    <select id="selectMenusBySelfUserId" parameterType="Long" resultMap="SelfMenuResult">
+        <include refid="selectSelfMenuVoDISTINCT"/>
+        left join self_role_menu rm on m.self_menu_id = rm.self_menu_id
+        left join self_user_role ur on rm.self_role_id = ur.self_role_id
+        LEFT JOIN self_role ro on ur.self_role_id = ro.self_role_id
+        where ur.self_user_id = #{selfUserId}
+        order by m.parent_id, m.order_num
+    </select>
+
+    <select id="selectSelfMenuListBySelfUserId" parameterType="Menu" resultMap="SelfMenuResult">
+        <include refid="selectSelfMenuVoDISTINCT"/>
+        LEFT JOIN self_role_menu rm ON m.self_menu_id = rm.self_menu_id
+        LEFT JOIN self_user_role ur ON rm.self_role_id = ur.self_role_id
+        LEFT JOIN self_role ro ON ur.self_role_id = ro.self_role_id
+        WHERE
+        ur.self_user_id = #{params.userId}
+        <if test="selfMenuName != null and selfMenuName != ''">
+            AND m.self_menu_name like concat('%', #{selfMenuName}, '%')
+        </if>
+        <if test="visible != null and visible != ''">
+            AND m.visible = #{visible}
+        </if>
+        order by m.parent_id, m.order_num
+    </select>
+
+    <select id="selectMenuAllBySelfUserId" parameterType="Long" resultMap="SelfMenuResult">
+        <include refid="selectSelfMenuVoDISTINCT"/>
+        LEFT JOIN self_role_menu rm ON m.self_menu_id = rm.self_menu_id
+        LEFT JOIN self_user_role ur ON rm.self_role_id = ur.self_role_id
+        LEFT JOIN self_role ro ON ur.self_role_id = ro.self_role_id
+        where ur.self_user_id = #{selfUserId}
+        order by m.parent_id, m.order_num
+    </select>
+
+    <select id="selectSelfMenuTree" parameterType="Long" resultType="String">
+        select concat(m.self_menu_id, ifnull(m.perms, '')) as perms
+        from self_menu m
+                 left join self_role_menu rm on m.self_menu_id = rm.self_menu_id
+        where rm.self_role_id = #{selfRoleId}
+        order by m.parent_id, m.order_num
+    </select>
+
+    <select id="selectMenuListBySelfRoleId" resultType="Long">
+        select m.self_menu_id
+        from self_menu m
+        left join self_role_menu rm on m.self_menu_id = rm.self_menu_id
+        where rm.self_role_id = #{selfRoleId}
+        <if test="menuCheckStrictly">
+            and m.self_menu_id not in (select m.parent_id from self_menu m inner join self_role_menu rm on
+            m.self_menu_id = rm.self_menu_id and rm.self_role_id = #{selfRoleId})
+        </if>
+        order by m.parent_id, m.order_num
+    </select>
+
+    <select id="checkMenuNameUnique" parameterType="SelfMenu" resultMap="SelfMenuResult">
+        <include refid="selectSelfMenuVo"/>
+        where self_menu_name=#{menuName} and parent_id = #{parentId} limit 1
+    </select>
+
+    <select id="hasChildBySelfMenuId" resultType="Integer">
+        select count(1)
+        from self_menu
+        where parent_id = #{selfMenuId}
+    </select>
+</mapper>

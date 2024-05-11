@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfRoleMenuMapper">
+
+	<resultMap type="selfRoleMenu" id="SelfRoleMenuResult">
+		<result property="selfRoleId"     column="self_role_id"      />
+		<result property="selfMenuId"     column="self_menu_id"      />
+	</resultMap>
+
+	<select id="checkMenuExistRole" resultType="Integer">
+		select count(1) from self_role_menu where self_menu_id = #{selfMenuId}
+	</select>
+
+	<delete id="deleteRoleMenuBySelfRoleId" parameterType="Long">
+		delete from self_role_menu where self_role_id=#{selfRoleId}
+	</delete>
+
+	<delete id="deleteRoleMenu" parameterType="Long">
+		delete from self_role_menu where self_role_id in
+		<foreach collection="array" item="selfRoleId" open="(" separator="," close=")">
+			#{selfRoleId}
+		</foreach>
+	</delete>
+
+	<insert id="batchRoleMenu">
+		insert into self_role_menu(self_role_id, self_menu_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+			(#{item.selfRoleId},#{item.selfMenuId})
+		</foreach>
+	</insert>
+
+</mapper> 

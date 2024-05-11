@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>本项目介绍</title>
+    <link rel="shortcut icon" href="favicon.svg">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/style.min.css" th:href="@{/css/style.min.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+    <div class="row border-bottom white-bg dashboard-header">
+        <div class="col-sm-3">
+            <h2>Hello,Guest</h2>
+            <small>微信小程序请扫描以下二维码：(点击图片放大)</small>
+            <br>
+            <br>
+            <p id="pay-qrcoder"><img th:src="@{/img/qr_coder.jpg}" width="100%"></p>
+            <br>
+        </div>
+        <div class="col-sm-5">
+            <h2>使用若依打通微信小程序登录授权认证接口及其他接口完整项目（UniApp版）</h2>
+            <p>一直想做一款基于若依后台管理系统的微信小程序，最近比较闲了，所以想做个简单的东西。主要为了学习，走一遍整个过程，也是为像我这种小白提供些简单的学习内容。</p>
+            <p>
+                <b>当前版本：</b><span>1.0</span>
+            </p>
+            <p>
+                <span class="label label-warning">&yen;免费开源</span>
+            </p>
+            <br>
+            <p>
+                <a class="btn btn-success btn-outline" href="https://gitee.com/rahman/abu-coder-ruoyi-uniapp-wx" target="_blank">
+                    <i class="fa fa-cloud"> </i> 本项目访问码云
+                </a>
+                <a class="btn btn-white btn-bitbucket" href="http://ruoyi.vip" target="_blank">
+                    <i class="fa fa-home"></i> 访问若依框架主页
+                </a>
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <h4>技术选型：</h4>
+            <ol>
+                <li>核心框架：Spring Boot。</li>
+                <li>安全框架：Apache Shiro。</li>
+                <li>模板引擎：Thymeleaf。</li>
+                <li>持久层框架：MyBatis。</li>
+				<li>定时任务:Quartz。</li>
+                <li>数据库连接池：Druid。</li>
+                <li>工具类：Fastjson。</li>
+                <li>更多……</li>
+            </ol>
+        </div>
+
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-4">
+
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>联系信息</h5>
+
+                    </div>
+                    <div class="ibox-content">
+                        <p><i class="fa fa-send-o"></i> 若依官网：<a href="http://www.ruoyi.vip" target="_blank">http://www.ruoyi.vip</a>
+                        </p>
+                        <p><i class="fa fa-qq"></i> QQ群：<a href="https://jq.qq.com/?_wv=1027&k=T2nwpddM" target="_blank">228763221</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>更新日志</h5>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <div class="panel-body">
+                            <div class="panel-group" id="version">
+                            <div class="panel panel-default">
+								<div class="panel-heading">
+								   <h5 class="panel-title">
+									   <a data-toggle="collapse" data-parent="#version" href="#v473">v1.0</a><code class="pull-right">2022.06.10</code>
+								   </h5>
+								</div>
+								<div id="v473" class="panel-collapse collapse in">
+									<div class="panel-body">
+									   <ol>
+									        <li>体验版发布</li>
+										</ol>
+									</div>
+								</div>
+							</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>捐赠</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="alert alert-warning">
+                            	请作者喝杯咖啡（点击图片放大）
+                        </div>
+                        <p id="pay-qrcode">
+                            <a href="javascript:;"><img th:src="@{/img/pay.png}" width="100%" alt="请使用手机支付宝或者微信扫码支付">
+                            </a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script type="text/javascript">
+	    $('#pay-qrcode').click(function(){
+	        var html=$(this).html();
+	        parent.layer.open({
+	            title: false,
+	            type: 1,
+	            closeBtn:false,
+	            shadeClose:true,
+	            area: ['600px', '360px'],
+	            content: html
+	        });
+	    });
+        $('#pay-qrcoder').click(function(){
+            var html1=$(this).html();
+            parent.layer.open({
+                title: false,
+                type: 1,
+                closeBtn:false,
+                shadeClose:true,
+                area: ['600px', '360px'],
+                content: html1
+            });
+        });
+    </script>
+</body>
+</html>

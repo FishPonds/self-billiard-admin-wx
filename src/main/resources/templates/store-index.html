@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>零度智慧门店管理系统</title>
+  <meta name="description" content="零度智慧门店管理系统">
+  <link href="../static/css/store-index.css" th:href="@{/css/store-index.css}" rel="stylesheet"/>
+  <!-- 360浏览器急速模式 -->
+  <meta name="renderer" content="webkit">
+  <!-- 避免IE使用兼容模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="shortcut icon" href="../static/favicon.svg" th:href="@{favicon.svg}"/>
+</head>
+<body>
+<header class="header">
+  <div class="nav">
+    <div class="nav-left">
+      <span class="nav-title">零度智慧门店管理系统</span>
+      <span class="nav-line">|</span>
+      <span class="nav-subTitle">门店主页</span>
+    </div>
+    <div class="nav-right">
+      <span th:text="${user.phonenumber}"></span>
+      <a class="nav-layout" th:href="@{logout}">退出登录</a>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+
+
+  <div class="info">
+    <div class="info-left">
+      <div class="info-left-avatar">
+
+      </div>
+      <span th:text="${user.getLoginName()}"></span>
+    </div>
+    <button class="info-set">账号设置</button>
+  </div>
+
+  <div class="shop">
+    <div class="title">门店(<span th:text="${storeList.size()}"></span>)</div>
+    <div id="shopList" class="shop-list">
+      <div class="item" th:each="store : ${storeList}">
+        <div class="item-head">
+          <span th:text="${store.storeName}"></span>
+          <div class="item-create">创建者</div>
+        </div>
+        <span class="desc">有效期至<span th:text="${store.validity}"></span></span>
+      </div>
+      <div class="item-create-box">
+        +创建门店
+      </div>
+    </div>
+  </div>
+</div>
+<script th:inline="javascript">
+  // 记录上一次选中的div，并且不受刷新影响
+  var shopList = document.getElementById('shopList');
+
+  shopList.addEventListener('click', function(e) {
+    var target = e.target;
+
+    // 点击的是子元素时，获取父元素
+    if (target.className !== 'item') {
+      target = target.closest('.item');
+    }
+
+    if (target) {
+      var items = shopList.getElementsByClassName('item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].style.borderColor = '#CCCCCE';
+      }
+      target.style.borderColor = '#ff0000';
+      localStorage.setItem('selectedStore', target.innerText);
+      window.location.href = '/index';
+    }
+  });
+
+  var selectedStore = localStorage.getItem('selectedStore');
+  if (selectedStore) {
+    var items = shopList.getElementsByClassName('item');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].innerText === selectedStore) {
+        items[i].style.borderColor = '#ff0000';
+      }
+    }
+  }
+</script>
+</body>
+</html>

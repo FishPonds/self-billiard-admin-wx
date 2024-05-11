@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfMerchantsMapper">
+
+    <resultMap type="SelfMerchants" id="SelfMerchantsResult">
+        <result property="customMerchantId" column="custom_merchant_id"/>
+        <result property="merchantKey" column="merchant_key"/>
+        <result property="selfUserId" column="self_user_id"/>
+        <result property="merchantName" column="merchant_name"/>
+        <result property="email" column="email"/>
+        <result property="password" column="password"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="status" column="status"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="contactName" column="contact_name"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="address" column="address"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSelfMerchantsVo">
+        select custom_merchant_id,
+               merchant_key,
+               self_user_id,
+               merchant_name,
+               email,
+               password,
+               del_flag,
+               status,
+               login_ip,
+               login_date,
+               contact_name,
+               contact_phone,
+               address,
+               create_by,
+               created_at,
+               update_by,
+               updated_at,
+               remark
+        from self_merchants
+    </sql>
+
+    <select id="selectMerchantsList" parameterType="SelfMerchants" resultMap="SelfMerchantsResult">
+        <include refid="selectSelfMerchantsVo"/>
+        <where>
+            AND del_flag = '0'
+            <if test="merchantKey != null and merchantKey != ''"> and merchant_key = #{merchantKey}</if>
+            <if test="selfUserId != null "> and self_user_id = #{selfUserId}</if>
+            <if test="merchantName != null and merchantName != ''"> and merchant_name like concat('%', #{merchantName}, '%')</if>
+            <if test="email != null and email != ''"> and email = #{email}</if>
+            <if test="password != null and password != ''"> and password = #{password}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="loginIp != null and loginIp != ''"> and login_ip = #{loginIp}</if>
+            <if test="loginDate != null "> and login_date = #{loginDate}</if>
+            <if test="contactName != null and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="contactPhone != null and contactPhone != ''"> and contact_phone = #{contactPhone}</if>
+            <if test="address != null and address != ''"> and address = #{address}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+
+    <select id="selectMerchantsListBySelfUserId" parameterType="SelfMerchants" resultMap="SelfMerchantsResult">
+        <include refid="selectSelfMerchantsVo"/>
+        WHERE self_user_id = #{selfUserId}
+    </select>
+
+    <select id="selectParentMerchantsList" parameterType="SelfMerchants" resultMap="SelfMerchantsResult">
+        <include refid="selectSelfMerchantsVo"/>
+        <where>
+            and parent_id =0
+            AND del_flag = '0'
+            <if test="merchantKey != null and merchantKey != ''"> and merchant_key = #{merchantKey}</if>
+            <if test="selfUserId != null "> and self_user_id = #{selfUserId}</if>
+            <if test="merchantName != null and merchantName != ''"> and merchant_name like concat('%', #{merchantName}, '%')</if>
+            <if test="email != null and email != ''"> and email = #{email}</if>
+            <if test="password != null and password != ''"> and password = #{password}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="loginIp != null and loginIp != ''"> and login_ip = #{loginIp}</if>
+            <if test="loginDate != null "> and login_date = #{loginDate}</if>
+            <if test="contactName != null and contactName != ''"> and contact_name like concat('%', #{contactName}, '%')</if>
+            <if test="contactPhone != null and contactPhone != ''"> and contact_phone = #{contactPhone}</if>
+            <if test="address != null and address != ''"> and address = #{address}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectMerchantsByCustomMerchantId" parameterType="Long" resultMap="SelfMerchantsResult">
+        <include refid="selectSelfMerchantsVo"/>
+        where custom_merchant_id = #{customMerchantId}
+        AND del_flag = '0'
+    </select>
+        
+    <insert id="insertMerchants" parameterType="SelfMerchants" useGeneratedKeys="true" keyProperty="customMerchantId">
+        insert into self_merchants
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="merchantKey != null and merchantKey != ''">merchant_key,</if>
+            <if test="selfUserId != null">self_user_id,</if>
+            <if test="merchantName != null and merchantName != ''">merchant_name,</if>
+            <if test="email != null">email,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="status != null">status,</if>
+            <if test="loginIp != null">login_ip,</if>
+            <if test="loginDate != null">login_date,</if>
+            <if test="contactName != null and contactName != ''">contact_name,</if>
+            <if test="contactPhone != null and contactPhone != ''">contact_phone,</if>
+            <if test="address != null">address,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="merchantKey != null and merchantKey != ''">#{merchantKey},</if>
+            <if test="selfUserId != null">#{selfUserId},</if>
+            <if test="merchantName != null and merchantName != ''">#{merchantName},</if>
+            <if test="email != null">#{email},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="status != null">#{status},</if>
+            <if test="loginIp != null">#{loginIp},</if>
+            <if test="loginDate != null">#{loginDate},</if>
+            <if test="contactName != null and contactName != ''">#{contactName},</if>
+            <if test="contactPhone != null and contactPhone != ''">#{contactPhone},</if>
+            <if test="address != null">#{address},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateMerchants" parameterType="SelfMerchants">
+        update self_merchants
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="merchantKey != null and merchantKey != ''">merchant_key = #{merchantKey},</if>
+            <if test="selfUserId != null">self_user_id = #{selfUserId},</if>
+            <if test="merchantName != null and merchantName != ''">merchant_name = #{merchantName},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="loginIp != null">login_ip = #{loginIp},</if>
+            <if test="loginDate != null">login_date = #{loginDate},</if>
+            <if test="contactName != null and contactName != ''">contact_name = #{contactName},</if>
+            <if test="contactPhone != null and contactPhone != ''">contact_phone = #{contactPhone},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where custom_merchant_id = #{customMerchantId}
+    </update>
+
+    <delete id="deleteMerchantsByCustomMerchantId" parameterType="Long">
+        update self_merchants set del_flag = '2',status='1' where custom_merchant_id = #{customMerchantId}
+    </delete>
+
+    <delete id="deleteMerchantsByCustomMerchantIds" parameterType="String">
+        update self_merchants set del_flag = '2',status='1' where custom_merchant_id in
+        <foreach item="customMerchantId" collection="array" open="(" separator="," close=")">
+            #{customMerchantId}
+        </foreach>
+    </delete>
+
+    <select id="checkCustomMerchantKeyUnique" parameterType="SelfMerchants" resultType="int">
+        select count(1) from self_merchants
+        where merchant_key = #{merchantKey}
+    </select>
+
+    <update id="updateMerchantsProFile" parameterType="selfMerchants">
+        update self_merchants
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="merchantKey != null and merchantKey != ''">merchant_key = #{merchantKey},</if>
+            <if test="selfUserId != null">self_user_id = #{selfUserId},</if>
+            <if test="merchantName != null and merchantName != ''">merchant_name = #{merchantName},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="loginIp != null">login_ip = #{loginIp},</if>
+            <if test="loginDate != null">login_date = #{loginDate},</if>
+            <if test="contactName != null and contactName != ''">contact_name = #{contactName},</if>
+            <if test="contactPhone != null and contactPhone != ''">contact_phone = #{contactPhone},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where custom_merchant_id = #{customMerchantId}
+    </update>
+</mapper>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfStoreInformationMapper">
+
+    <resultMap type="SelfStoreInformation" id="SelfStoreInformationResult">
+        <result property="storeId" column="store_id"/>
+        <result property="storeKey" column="store_key"/>
+        <result property="storeName" column="store_name"/>
+        <result property="merchantId" column="merchant_id"/>
+        <result property="merchantKey" column="merchant_key"/>
+        <result property="storeSize" column="store_size"/>
+        <result property="provinceId" column="province_id"/>
+        <result property="provinceName" column="province_name"/>
+        <result property="cityId" column="city_id"/>
+        <result property="cityName" column="city_name"/>
+        <result property="districtId" column="district_id"/>
+        <result property="districtName" column="district_name"/>
+        <result property="address" column="address"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="phone" column="phone"/>
+        <result property="wechatImageUrl" column="wechat_image_url"/>
+        <result property="wechatId" column="wechat_id"/>
+        <result property="businessHoursStart" column="business_hours_start"/>
+        <result property="businessHoursEnd" column="business_hours_end"/>
+        <result property="businessStatus" column="business_status"/>
+        <result property="businessStatusNotes" column="business_status_notes"/>
+        <result property="storeDescription" column="store_description"/>
+        <result property="validity" column="validity"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="selectSelfStoreInformationVo">
+        select store_id,
+               store_key,
+               store_name,
+               merchant_id,
+               merchant_key,
+               store_size,
+               province_id,
+               province_name,
+               city_id,
+               city_name,
+               district_id,
+               district_name,
+               address,
+               longitude,
+               latitude,
+               phone,
+               wechat_image_url,
+               wechat_id,
+               business_hours_start,
+               business_hours_end,
+               business_status,
+               business_status_notes,
+               store_description,
+               validity,
+               created_at,
+               updated_at
+        from self_store_information
+    </sql>
+
+    <select id="selectSelfStoreInformationList" parameterType="SelfStoreInformation"
+            resultMap="SelfStoreInformationResult">
+        <include refid="selectSelfStoreInformationVo"/>
+        <where>
+            <if test="storeKey != null ">and store_key = #{storeKey}</if>
+            <if test="storeName != null  and storeName != ''">and store_name like concat('%', #{storeName}, '%')</if>
+            <if test="merchantId != null ">and merchant_id = #{merchantId}</if>
+            <if test="merchantKey != null  and merchantKey != ''">and merchant_key = #{merchantKey}</if>
+            <if test="storeSize != null ">and store_size = #{storeSize}</if>
+            <if test="provinceId != null ">and province_id = #{provinceId}</if>
+            <if test="provinceName != null  and provinceName != ''">and province_name like concat('%', #{provinceName},
+                '%')
+            </if>
+            <if test="cityId != null ">and city_id = #{cityId}</if>
+            <if test="cityName != null  and cityName != ''">and city_name like concat('%', #{cityName}, '%')</if>
+            <if test="districtId != null ">and district_id = #{districtId}</if>
+            <if test="districtName != null  and districtName != ''">and district_name like concat('%', #{districtName},
+                '%')
+            </if>
+            <if test="address != null  and address != ''">and address = #{address}</if>
+            <if test="longitude != null  and longitude != ''">and longitude = #{longitude}</if>
+            <if test="latitude != null  and latitude != ''">and latitude = #{latitude}</if>
+            <if test="phone != null  and phone != ''">and phone = #{phone}</if>
+            <if test="wechatImageUrl != null  and wechatImageUrl != ''">and wechat_image_url = #{wechatImageUrl}</if>
+            <if test="wechatId != null  and wechatId != ''">and wechat_id = #{wechatId}</if>
+            <if test="businessHoursStart != null  and businessHoursStart != ''">and business_hours_start =
+                #{businessHoursStart}
+            </if>
+            <if test="businessHoursEnd != null  and businessHoursEnd != ''">and business_hours_end =
+                #{businessHoursEnd}
+            </if>
+            <if test="businessStatus != null  and businessStatus != ''">and business_status = #{businessStatus}</if>
+            <if test="businessStatusNotes != null  and businessStatusNotes != ''">and business_status_notes =
+                #{businessStatusNotes}
+            </if>
+            <if test="storeDescription != null  and storeDescription != ''">and store_description =
+                #{storeDescription}
+            </if>
+            <if test="validity != null ">and validity = #{validity}</if>
+            <if test="createdAt != null ">and created_at = #{createdAt}</if>
+            <if test="updatedAt != null ">and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+
+    <select id="selectSelfStoreInformationByStoreId" parameterType="Long" resultMap="SelfStoreInformationResult">
+        <include refid="selectSelfStoreInformationVo"/>
+        where store_id = #{storeId}
+    </select>
+
+    <insert id="insertSelfStoreInformation" parameterType="SelfStoreInformation" useGeneratedKeys="true"
+            keyProperty="storeId">
+        insert into self_store_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storeKey != null">store_key,</if>
+            <if test="storeName != null and storeName != ''">store_name,</if>
+            <if test="merchantId != null">merchant_id,</if>
+            <if test="merchantKey != null and merchantKey != ''">merchant_key,</if>
+            <if test="storeSize != null">store_size,</if>
+            <if test="provinceId != null">province_id,</if>
+            <if test="provinceName != null and provinceName != ''">province_name,</if>
+            <if test="cityId != null">city_id,</if>
+            <if test="cityName != null and cityName != ''">city_name,</if>
+            <if test="districtId != null">district_id,</if>
+            <if test="districtName != null and districtName != ''">district_name,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="wechatImageUrl != null">wechat_image_url,</if>
+            <if test="wechatId != null">wechat_id,</if>
+            <if test="businessHoursStart != null">business_hours_start,</if>
+            <if test="businessHoursEnd != null">business_hours_end,</if>
+            <if test="businessStatus != null and businessStatus != ''">business_status,</if>
+            <if test="businessStatusNotes != null">business_status_notes,</if>
+            <if test="storeDescription != null">store_description,</if>
+            <if test="validity != null">validity,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storeKey != null">#{storeKey},</if>
+            <if test="storeName != null and storeName != ''">#{storeName},</if>
+            <if test="merchantId != null">#{merchantId},</if>
+            <if test="merchantKey != null and merchantKey != ''">#{merchantKey},</if>
+            <if test="storeSize != null">#{storeSize},</if>
+            <if test="provinceId != null">#{provinceId},</if>
+            <if test="provinceName != null and provinceName != ''">#{provinceName},</if>
+            <if test="cityId != null">#{cityId},</if>
+            <if test="cityName != null and cityName != ''">#{cityName},</if>
+            <if test="districtId != null">#{districtId},</if>
+            <if test="districtName != null and districtName != ''">#{districtName},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="longitude != null">#{longitude},</if>
+            <if test="latitude != null">#{latitude},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="wechatImageUrl != null">#{wechatImageUrl},</if>
+            <if test="wechatId != null">#{wechatId},</if>
+            <if test="businessHoursStart != null">#{businessHoursStart},</if>
+            <if test="businessHoursEnd != null">#{businessHoursEnd},</if>
+            <if test="businessStatus != null and businessStatus != ''">#{businessStatus},</if>
+            <if test="businessStatusNotes != null">#{businessStatusNotes},</if>
+            <if test="storeDescription != null">#{storeDescription},</if>
+            <if test="validity != null">#{validity},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelfStoreInformation" parameterType="SelfStoreInformation">
+        update self_store_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="storeKey != null">store_key = #{storeKey},</if>
+            <if test="storeName != null and storeName != ''">store_name = #{storeName},</if>
+            <if test="merchantId != null">merchant_id = #{merchantId},</if>
+            <if test="merchantKey != null and merchantKey != ''">merchant_key = #{merchantKey},</if>
+            <if test="storeSize != null">store_size = #{storeSize},</if>
+            <if test="provinceId != null">province_id = #{provinceId},</if>
+            <if test="provinceName != null and provinceName != ''">province_name = #{provinceName},</if>
+            <if test="cityId != null">city_id = #{cityId},</if>
+            <if test="cityName != null and cityName != ''">city_name = #{cityName},</if>
+            <if test="districtId != null">district_id = #{districtId},</if>
+            <if test="districtName != null and districtName != ''">district_name = #{districtName},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="wechatImageUrl != null">wechat_image_url = #{wechatImageUrl},</if>
+            <if test="wechatId != null">wechat_id = #{wechatId},</if>
+            <if test="businessHoursStart != null">business_hours_start = #{businessHoursStart},</if>
+            <if test="businessHoursEnd != null">business_hours_end = #{businessHoursEnd},</if>
+            <if test="businessStatus != null and businessStatus != ''">business_status = #{businessStatus},</if>
+            <if test="businessStatusNotes != null">business_status_notes = #{businessStatusNotes},</if>
+            <if test="storeDescription != null">store_description = #{storeDescription},</if>
+            <if test="validity != null">validity = #{validity},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where store_id = #{storeId}
+    </update>
+
+    <delete id="deleteSelfStoreInformationByStoreId" parameterType="Long">
+        delete
+        from self_store_information
+        where store_id = #{storeId}
+    </delete>
+
+    <delete id="deleteSelfStoreInformationByStoreIds" parameterType="String">
+        delete from self_store_information where store_id in
+        <foreach item="storeId" collection="array" open="(" separator="," close=")">
+            #{storeId}
+        </foreach>
+    </delete>
+</mapper>

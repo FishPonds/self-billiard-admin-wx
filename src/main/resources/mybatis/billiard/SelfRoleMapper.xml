@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfRoleMapper">
+
+    <resultMap type="SelfRole" id="SelfRoleResult">
+        <result property="selfRoleId" column="self_role_id"/>
+        <result property="selfRoleName" column="self_role_name"/>
+        <result property="selfRoleKey" column="self_role_key"/>
+        <result property="selfRoleSort" column="self_role_sort"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="menuCheckStrictly" column="menu_check_strictly"/>
+        <result property="deptCheckStrictly" column="dept_check_strictly"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSelfRoleVo">
+        select self_role_id,
+               self_role_name,
+               self_role_key,
+               self_role_sort,
+               data_scope,
+               menu_check_strictly,
+               dept_check_strictly,
+               status,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from self_role
+    </sql>
+
+    <sql id="selectRoleContactVo">
+        SELECT DISTINCT
+            r.self_role_id,
+            r.self_role_name,
+            r.self_role_key,
+            r.self_role_sort,
+            r.data_scope,
+            r.STATUS,
+            r.del_flag,
+            r.create_time,
+            r.remark
+        FROM
+            self_role r
+                LEFT JOIN self_user_role ur ON ur.self_role_id = r.self_role_id
+                LEFT JOIN self_user u ON u.self_user_id = ur.self_user_id
+    </sql>
+
+    <select id="selectSelfRoleList" parameterType="SelfRole" resultMap="SelfRoleResult">
+        <include refid="selectSelfRoleVo"/>
+        <where>
+            <if test="selfRoleName != null  and selfRoleName != ''">and self_role_name like concat('%', #{selfRoleName},
+                '%')
+            </if>
+            <if test="selfRoleKey != null  and selfRoleKey != ''">and self_role_key = #{selfRoleKey}</if>
+            <if test="selfRoleSort != null ">and self_role_sort = #{selfRoleSort}</if>
+            <if test="dataScope != null  and dataScope != ''">and data_scope = #{dataScope}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectSelfRoleBySelfRoleId" parameterType="Long" resultMap="SelfRoleResult">
+        <include refid="selectSelfRoleVo"/>
+        where self_role_id = #{selfRoleId}
+    </select>
+
+    <insert id="insertSelfRole" parameterType="SelfRole" useGeneratedKeys="true" keyProperty="selfRoleId">
+        insert into self_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="selfRoleName != null and selfRoleName != ''">self_role_name,</if>
+            <if test="selfRoleKey != null and selfRoleKey != ''">self_role_key,</if>
+            <if test="selfRoleSort != null">self_role_sort,</if>
+            <if test="dataScope != null">data_scope,</if>
+            <if test="menuCheckStrictly != null">menu_check_strictly,</if>
+            <if test="deptCheckStrictly != null">dept_check_strictly,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="selfRoleName != null and selfRoleName != ''">#{selfRoleName},</if>
+            <if test="selfRoleKey != null and selfRoleKey != ''">#{selfRoleKey},</if>
+            <if test="selfRoleSort != null">#{selfRoleSort},</if>
+            <if test="dataScope != null">#{dataScope},</if>
+            <if test="menuCheckStrictly != null">#{menuCheckStrictly},</if>
+            <if test="deptCheckStrictly != null">#{deptCheckStrictly},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelfRole" parameterType="SelfRole">
+        update self_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="selfRoleName != null and selfRoleName != ''">self_role_name = #{selfRoleName},</if>
+            <if test="selfRoleKey != null and selfRoleKey != ''">self_role_key = #{selfRoleKey},</if>
+            <if test="selfRoleSort != null">self_role_sort = #{selfRoleSort},</if>
+            <if test="dataScope != null">data_scope = #{dataScope},</if>
+            <if test="menuCheckStrictly != null">menu_check_strictly = #{menuCheckStrictly},</if>
+            <if test="deptCheckStrictly != null">dept_check_strictly = #{deptCheckStrictly},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where self_role_id = #{selfRoleId}
+    </update>
+
+    <delete id="deleteSelfRoleBySelfRoleId" parameterType="Long">
+        delete
+        from self_role
+        where self_role_id = #{selfRoleId}
+    </delete>
+
+    <delete id="deleteSelfRoleBySelfRoleIds" parameterType="String">
+        delete from self_role where self_role_id in
+        <foreach item="selfRoleId" collection="array" open="(" separator="," close=")">
+            #{selfRoleId}
+        </foreach>
+    </delete>
+
+    <select id="checkRoleNameUnique" parameterType="String" resultMap="SelfRoleResult">
+        <include refid="selectSelfRoleVo"/>
+        where self_role_name=#{selfRoleName} and del_flag = '0' limit 1
+    </select>
+
+    <select id="checkRoleKeyUnique" parameterType="String" resultMap="SelfRoleResult">
+        <include refid="selectSelfRoleVo"/>
+        where self_role_key=#{selfRoleKey} and del_flag = '0' limit 1
+    </select>
+
+    <select id="selectSelfRoleByCustomMerchantId" parameterType="Long" resultMap="SelfRoleResult">
+        SELECT DISTINCT r.self_role_id,
+                        r.self_role_name,
+                        r.self_role_key,
+                        r.self_role_sort,
+                        r.data_scope,
+                        r.menu_check_strictly,
+                        r.dept_check_strictly,
+                        r.STATUS,
+                        r.del_flag,
+                        r.create_time,
+                        r.remark
+        FROM self_role r
+                 LEFT JOIN self_merchants_role mr ON mr.self_role_id = r.self_role_id
+                 LEFT JOIN self_merchants m ON m.custom_merchant_id = mr.custom_merchant_id
+        WHERE r.del_flag = '0'
+          and mr.custom_merchant_id = #{customMerchantId}
+    </select>
+
+    <select id="selectRolesBySelfUserId" parameterType="Long" resultMap="SelfRoleResult">
+        <include refid="selectRoleContactVo"/>
+        WHERE r.del_flag = '0' and ur.self_user_id = #{selfUserId}
+    </select>
+</mapper>

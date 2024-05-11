@@ -1,0 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #F0F0F0;
+    box-sizing: border-box;
+}
+
+.header{
+    background-color: #fff;
+    padding: 20px 0;
+}
+.header .nav{
+    width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header .nav .nav-title{
+    font-weight: bold;
+}
+.header .nav .nav-line{
+    color: #ADADAD;
+    margin: 0 10px;
+}
+.header .nav .nav-subTitle{
+    color: #ADADAD;
+    font-size: 14px;
+}
+
+.header .nav .nav-right{
+    font-size: 14px;
+}
+
+.nav-layout{
+    margin-left: 10px;
+    color: #2A81FA;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.main {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.info-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-left-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #F1F1F1;
+}
+
+.info-left-avatar img {
+    width: 90%;
+    height: 90%;
+}
+
+.info-set {
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 5px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    background-color: #327AE1;
+}
+
+.shop {
+    margin-top: 40px;
+}
+
+.shop .title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.shop .shop-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    user-select: none; /* 标准浏览器 */
+    -webkit-user-select: none; /* WebKit 浏览器，如 Safari */
+    -moz-user-select: none; /* Mozilla 浏览器，如 Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.shop .shop-list .item {
+    height: 100px;
+    border-left: 5px solid #CCCCCE;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.shop .shop-list .item .item-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.shop .shop-list .item .item-head span {
+    font-weight: bold;
+}
+
+.shop .shop-list .item .item-create {
+    padding: 2px 10px;
+    border-radius: 4px;
+    border: #CCCCCE 1px solid;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.shop .shop-list .item .desc {
+    font-size: 14px;
+    color: #CCCCCE;
+}
+
+.shop .shop-list .item-create-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    background-color: #fff;
+    color: #2A81FA;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
