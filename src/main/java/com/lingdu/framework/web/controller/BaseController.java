@@ -4,9 +4,7 @@ import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
 
-import com.lingdu.project.billiard.domain.SelfMerchants;
 import com.lingdu.project.billiard.domain.SelfUser;
-import com.lingdu.project.billiard.domain.SelfUserProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
@@ -23,7 +21,6 @@ import com.lingdu.framework.web.domain.AjaxResult.Type;
 import com.lingdu.framework.web.page.PageDomain;
 import com.lingdu.framework.web.page.TableDataInfo;
 import com.lingdu.framework.web.page.TableSupport;
-import com.lingdu.project.system.user.domain.User;
 
 /**
  * web层通用数据处理
@@ -184,27 +181,8 @@ public class BaseController
      */
     public void setSelfUser(SelfUser selfUser)
     {
-        SelfUserProfile selfUserProfile = new SelfUserProfile();
-        selfUserProfile.setSelfUser(selfUser);
-        ShiroUtils.setSelfUser(selfUserProfile);
+        ShiroUtils.setSelfUser(selfUser);
     }
-
-    /**
-     * 设置用户缓存信息
-     */
-    public void setSelfUserProfile(SelfUserProfile selfUserProfile)
-    {
-        ShiroUtils.setSelfUser(selfUserProfile);
-    }
-
-    /**
-     * 获取用户缓存商户信息
-     */
-    public SelfMerchants getSelfMerchants()
-    {
-        return ShiroUtils.getSelfMerchants();
-    }
-
 
     /**
      * 获取登录用户id

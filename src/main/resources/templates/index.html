@@ -47,7 +47,7 @@
 				    </div>
             	</li>
                 <li>
-                    <a class="menuItem" th:href="@{/system/main}"><i class="fa fa-home"></i> <span class="nav-label">首页</span> </a>
+                    <a class="menuItem" th:href="@{/system/main}"><i class="fa fa-home"></i> <span class="nav-label">概括</span> </a>
                 </li>
                 <li th:each="menu : ${menus}">
                 	<a th:class="@{${!#strings.isEmpty(menu.url) && menu.url != '#'} ? ${menu.target}}" th:href="@{${#strings.isEmpty(menu.url)} ? |#| : ${menu.url}}" th:data-refresh="${menu.isRefresh == '0'}">
@@ -210,6 +210,10 @@
 								<i class="fa fa-key"></i> 修改密码</a>
 							</li>
 							<li>
+								<a onclick="changeStore()">
+									<i class="fa fa-key"></i> 切换门店</a>
+							</li>
+							<li>
 								<a onclick="switchSkin()">
 								<i class="fa fa-dashboard"></i> 切换主题</a>
 							</li>
@@ -233,7 +237,7 @@
             </button>
             <nav class="page-tabs menuTabs">
                 <div class="page-tabs-content">
-                    <a href="javascript:;" class="active menuTab" th:data-id="@{/system/main}">首页</a>
+                    <a href="javascript:;" class="active menuTab" th:data-id="@{/system/main}">概括</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right tabRight">
@@ -294,6 +298,11 @@ if($.common.isNotEmpty(skin)){
 function resetPwd() {
     var url = ctx + 'system/user/profile/resetPwd';
     $.modal.open("重置密码", url, '770', '380');
+}
+
+/* 切换门店 */
+function changeStore() {
+	location.href = ctx + 'store-index';
 }
 
 /* 切换主题 */

@@ -3,10 +3,8 @@ package com.lingdu.framework.shiro.realm;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.lingdu.project.billiard.domain.SelfMerchants;
 import com.lingdu.project.billiard.domain.SelfUser;
 import com.lingdu.project.billiard.service.ISelfMenuService;
-import com.lingdu.project.billiard.service.ISelfMerchantsService;
 import com.lingdu.project.billiard.service.ISelfRoleService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -18,7 +16,6 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -35,9 +32,6 @@ import com.lingdu.common.exception.user.UserPasswordNotMatchException;
 import com.lingdu.common.exception.user.UserPasswordRetryLimitExceedException;
 import com.lingdu.common.utils.security.ShiroUtils;
 import com.lingdu.framework.shiro.service.LoginService;
-import com.lingdu.project.system.menu.service.IMenuService;
-import com.lingdu.project.system.role.service.IRoleService;
-import com.lingdu.project.system.user.domain.User;
 
 /**
  * 自定义Realm 处理登录 权限

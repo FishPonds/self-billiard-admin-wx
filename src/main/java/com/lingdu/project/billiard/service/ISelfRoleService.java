@@ -30,7 +30,7 @@ public interface ISelfRoleService {
     public List<SelfRole> selectSelfRoleList(SelfRole selfRole);
 
     /**
-     * 根据商户id查询角色列表
+     * 根据用户id查询角色列表
      *
      * @param selfUserId 台球用户id
      * @return 角色列表

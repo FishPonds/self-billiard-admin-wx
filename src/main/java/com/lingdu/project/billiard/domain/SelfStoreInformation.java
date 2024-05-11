@@ -36,16 +36,10 @@ public class SelfStoreInformation extends BaseEntity {
     private String storeName;
 
     /**
-     * 商户ID
+     * 用户ID
      */
-    @Excel(name = "商户ID")
-    private Long merchantId;
-
-    /**
-     * 商户Key
-     */
-    @Excel(name = "商户Key")
-    private String merchantKey;
+    @Excel(name = "用户ID")
+    private Long selfUserId;
 
     /**
      * 门店面积，单位：平方米
@@ -210,20 +204,12 @@ public class SelfStoreInformation extends BaseEntity {
         return storeName;
     }
 
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
+    public Long getSelfUserId() {
+        return selfUserId;
     }
 
-    public Long getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantKey(String merchantKey) {
-        this.merchantKey = merchantKey;
-    }
-
-    public String getMerchantKey() {
-        return merchantKey;
+    public void setSelfUserId(Long selfUserId) {
+        this.selfUserId = selfUserId;
     }
 
     public void setStoreSize(Long storeSize) {
@@ -400,8 +386,7 @@ public class SelfStoreInformation extends BaseEntity {
                 .append("storeId", getStoreId())
                 .append("storeKey", getStoreKey())
                 .append("storeName", getStoreName())
-                .append("merchantId", getMerchantId())
-                .append("merchantKey", getMerchantKey())
+                .append("selfUserId", getSelfUserId())
                 .append("storeSize", getStoreSize())
                 .append("provinceId", getProvinceId())
                 .append("provinceName", getProvinceName())

@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lingdu.project.billiard.domain.*;
 import com.lingdu.project.billiard.service.ISelfMenuService;
-import com.lingdu.project.billiard.service.ISelfMerchantsService;
 import com.lingdu.project.billiard.service.ISelfStoreInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,9 +26,7 @@ import com.lingdu.framework.shiro.service.PasswordService;
 import com.lingdu.framework.web.controller.BaseController;
 import com.lingdu.framework.web.domain.AjaxResult;
 import com.lingdu.project.system.config.service.IConfigService;
-import com.lingdu.project.system.menu.domain.Menu;
 import com.lingdu.project.system.menu.service.IMenuService;
-import com.lingdu.project.system.user.domain.User;
 
 /**
  * 首页 业务处理
@@ -56,23 +53,14 @@ public class IndexController extends BaseController
 
     @Autowired
     private ISelfStoreInformationService selfStoreInformationService;
-    @Autowired
-    private ISelfMerchantsService selfMerchantsService;
 
 
     @GetMapping("/store-index")
     public String storeIndex(ModelMap modelMap){
         //获取当前登录用户
         SelfUser selfUser = getSelfUser();
-        //根据用户id查询商户信息
-        SelfMerchants selfMerchants = selfMerchantsService.selectMerchantsListBySelfUserId(selfUser.getSelfUserId());
         SelfStoreInformation selfStoreInfo = new SelfStoreInformation();
-        selfStoreInfo.setMerchantId(selfMerchants.getCustomMerchantId());
-        SelfUserProfile selfUserProfile = new SelfUserProfile();
-        selfUserProfile.setSelfUser(selfUser);
-        selfUserProfile.setSelfMerchants(selfMerchants);
-        //存储商户信息
-        setSelfUserProfile(selfUserProfile);
+        selfStoreInfo.setSelfUserId(selfUser.getSelfUserId());
         modelMap.put("storeList",selfStoreInformationService.selectSelfStoreInformationList(selfStoreInfo));
         modelMap.put("user", selfUser);
         return "store-index";
@@ -165,7 +153,7 @@ public class IndexController extends BaseController
     public String main(ModelMap mmap)
     {
         mmap.put("version", ruoYiConfig.getVersion());
-        return "main";
+        return "main_v1";
     }
 
     // content-main class

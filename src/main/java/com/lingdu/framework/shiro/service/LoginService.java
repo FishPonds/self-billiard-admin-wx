@@ -1,8 +1,6 @@
 package com.lingdu.framework.shiro.service;
 
-import com.lingdu.project.billiard.domain.SelfMerchants;
 import com.lingdu.project.billiard.domain.SelfUser;
-import com.lingdu.project.billiard.service.ISelfMerchantsService;
 import com.lingdu.project.billiard.service.ISelfUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +19,6 @@ import com.lingdu.common.utils.StringUtils;
 import com.lingdu.common.utils.security.ShiroUtils;
 import com.lingdu.framework.manager.AsyncManager;
 import com.lingdu.framework.manager.factory.AsyncFactory;
-import com.lingdu.project.system.user.domain.User;
 import com.lingdu.project.system.user.domain.UserStatus;
 import com.lingdu.project.system.user.service.IUserService;
 
@@ -41,9 +38,6 @@ public class LoginService
 
     @Autowired
     private ISelfUserService selfUserService;
-
-    @Autowired
-    private ISelfMerchantsService selfMerchantsService;
 
     /**
      * 登录

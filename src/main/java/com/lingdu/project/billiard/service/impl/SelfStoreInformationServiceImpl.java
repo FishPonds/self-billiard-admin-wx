@@ -48,9 +48,9 @@ public class SelfStoreInformationServiceImpl implements ISelfStoreInformationSer
     public List<SelfStoreInformation> selectSelfStoreInformationList(SelfStoreInformation selfStoreInformation) {
         List<SelfStoreInformation> selfStoreInformations = selfStoreInformationMapper.selectSelfStoreInformationList(selfStoreInformation);
 
-        if (selfStoreInformations == null || selfStoreInformations.isEmpty()) {
-            throw new ServiceException("未查询到门店信息");
-        }
+//        if (selfStoreInformations == null || selfStoreInformations.isEmpty()) {
+//            throw new ServiceException("未查询到门店信息");
+//        }
 
         // 收集所有门店ID
         List<Long> storeIds = selfStoreInformations.stream()

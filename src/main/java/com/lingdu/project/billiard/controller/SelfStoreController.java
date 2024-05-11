@@ -1,19 +1,10 @@
 package com.lingdu.project.billiard.controller;
 
-import com.lingdu.common.utils.security.ShiroUtils;
 import com.lingdu.framework.web.controller.BaseController;
-import com.lingdu.framework.web.domain.AjaxResult;
-import com.lingdu.framework.web.page.TableDataInfo;
-import com.lingdu.project.billiard.domain.SelfMerchants;
-import com.lingdu.project.billiard.domain.SelfStoreInformation;
-import com.lingdu.project.billiard.domain.SelfUser;
-import com.lingdu.project.billiard.service.ISelfMerchantsService;
 import com.lingdu.project.billiard.service.ISelfStoreInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 文件创建人：波波
@@ -29,8 +20,6 @@ public class SelfStoreController extends BaseController {
 
     @Autowired
     private ISelfStoreInformationService selfStoreInformationService;
-    @Autowired
-    private ISelfMerchantsService selfMerchantsService;
 
     /**
      * 门店列表
