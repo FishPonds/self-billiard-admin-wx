@@ -51,7 +51,7 @@
                 </li>
                 <li th:each="menu : ${menus}">
                 	<a th:class="@{${!#strings.isEmpty(menu.url) && menu.url != '#'} ? ${menu.target}}" th:href="@{${#strings.isEmpty(menu.url)} ? |#| : ${menu.url}}" th:data-refresh="${menu.isRefresh == '0'}">
-                		<i class="fa fa-bar-chart-o" th:class="${menu.icon}"></i>
+                		<i class="fa fa-bar-chart-o" th:class="'fa fa-'+${menu.icon}"></i>
                     	<span class="nav-label" th:text="${menu.selfMenuName}">一级菜单</span>
                     	<span th:class="${#strings.isEmpty(menu.url) || menu.url == '#'} ? |fa arrow|"></span>
                 	</a>
