@@ -92,7 +92,7 @@
         </foreach>
     </delete>
 
-    <select id="selectSelfStorePhotoAlbumListByStoreId" parameterType="java.util.List" resultType="SelfStorePhotoAlbum">
+    <select id="selectSelfStorePhotoAlbumListByStoreId" parameterType="java.util.List" resultMap="SelfStorePhotoAlbumResult">
         <include refid="selectSelfStorePhotoAlbumVo"/>
         WHERE store_id IN
         <foreach collection="storeIds" item="storeId" open="(" separator="," close=")">

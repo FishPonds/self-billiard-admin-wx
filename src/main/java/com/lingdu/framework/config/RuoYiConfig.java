@@ -121,4 +121,12 @@ public class RuoYiConfig
     {
         return getProfile() + "/upload";
     }
+
+    /**
+     * 获取台桌图片上传路径
+     */
+    public static String getTablePath()
+    {
+        return getProfile() + "/table";
+    }
 }

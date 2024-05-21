@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增桌台数据')"/>
+    <th:block th:include="include :: jasny-bootstrap-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-table-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台名称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="tableName" id="tableName" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台编码：</label>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="tableCode" id="tableCode" readonly required>
+                    <span class="input-group-btn">
+                        <button onclick="refresh()" type="button" class="btn btn-sm btn-white">
+                            <i class="fa fa-refresh"></i>
+									刷新
+                        </button>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台类型：</label>
+            <div class="col-sm-8">
+                <select class="form-control m-b" id="tableType" name="tableType"
+                        th:with="type=${@dict.getType('self_table_type')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台单价：</label>
+            <div class="col-sm-8">
+                <div class="input-group m-b"><span class="input-group-addon">&yen;</span>
+                    <input type="text" class="form-control" id="price" name="price" required> <span class="input-group-addon">元/小时</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">会员卡支付设置：</label>
+            <div class="col-sm-8">
+                <div class="radio-box" th:each="dict : ${@dict.getType('self_table_vip')}">
+                    <input type="radio" th:id="${dict.dictCode}" name="memberPaymentSettings" id="memberPaymentSettings" th:value="${dict.dictValue}"
+                           th:checked="${dict.default}">
+                    <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                </div>
+                <i class="fa fa-info-circle"></i> 开启后将支持使用会员储值卡支付
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">会员单价：</label>
+            <div class="col-sm-8">
+                <div class="input-group m-b"><span class="input-group-addon">&yen;</span>
+                    <input type="text" class="form-control" id="memberPrice" name="memberPrice" required> <span
+                            class="input-group-addon">元/小时</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">状态：</label>
+            <div class="col-sm-8">
+                <div class="radio-box" th:each="dict : ${@dict.getType('self_table_status')}">
+                    <input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}"
+                           th:checked="${dict.default}">
+                    <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">容纳人数：</label>
+            <div class="col-sm-8">
+                <select class="form-control m-b" id="capacity" name="capacity"
+                        th:with="type=${@dict.getType('capacity')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台图片：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="hidden" name="images" id="images">
+                <div class="file-loading">
+                    <input id="multipleFile" name="files" type="file" multiple>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">桌台简介：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="description" id="description">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea id="notes" name="notes" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: jasny-bootstrap-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js" />
+<script type="text/javascript">
+    var prefix = ctx + "billiard/table";
+    $("#form-table-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            //判断桌台状态是否选中
+            if ($("input[name='status']:checked").val() == null) {
+                $.modal.msgWarning("请选择桌台状态");
+                return;
+            }
+            //判断会员卡支付设置是否选中
+            if ($("input[name='memberPaymentSettings']:checked").val() == null) {
+                $.modal.msgWarning("请选择会员卡支付设置");
+                return;
+            }
+            //判断桌台图片是否上传
+            if ($("#images").val() == "") {
+                $.modal.msgWarning("请上传桌台图片");
+                return;
+            }
+            $.operate.save(prefix + "/addTable", $('#form-table-add').serialize());
+        }
+    }
+
+    //打开页面获取桌台编码
+    $(document).ready(function () {
+        refresh();
+    });
+
+    // 刷新
+    function refresh() {
+        $.ajax({
+            type: "get",
+            url: prefix + "/getTableCode",
+            success: function (data) {
+                //将获取到的桌台编码赋值给桌台编码输入框
+                $("#tableCode").val(data.msg);
+            }
+        });
+    }
+
+    // 多图上传
+    $("#multipleFile").fileinput({
+        uploadUrl: ctx + 'common/uploadTableFiles',
+        uploadAsync: false,
+        allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
+        allowedFileTypes:['image'],//上传文件类型
+        maxFileCount: 3,
+        maxFileSize: 10240,
+        // 这个配置就是解决办法了,初始化时限制图片大小
+        previewSettings: {
+            image: {width: "200px", height: "200px"},
+        }
+    }).on('filebatchuploadsuccess', function (event, data, previewId, index) {
+        var rsp = data.response;
+        //将上传成功的图片地址赋值给隐藏域
+        $("#images").val(rsp.urls);
+    }).on('fileremoved', function (event, id, index) {
+        $("input[name='" + event.currentTarget.id + "']").val('')
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+  <th:block th:include="include :: header('桌台信息')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+  <div class="row">
+    <div class="col-sm-12 search-collapse">
+      <form id="post-form">
+        <div class="select-list">
+          <ul>
+            <li>
+              桌台名称：<input type="text" name="tableName"/>
+            </li>
+            <li>
+              桌台状态：<select name="status" th:with="type=${@dict.getType('self_table_status')}">
+              <option value="">所有</option>
+              <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+            </select>
+            </li>
+            <li>
+              桌台类型：<select name="tableType" th:with="type=${@dict.getType('self_table_type')}">
+              <option value="">所有</option>
+              <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+            </select>
+            </li>
+            <li>
+              <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+              <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+            </li>
+          </ul>
+        </div>
+      </form>
+    </div>
+
+    <div class="btn-group-sm" id="toolbar" role="group">
+      <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="billiard:table:add">
+        <i class="fa fa-plus"></i> 新增
+      </a>
+      <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="billiard:table:edit">
+        <i class="fa fa-edit"></i> 修改
+      </a>
+      <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="billiard:table:del">
+        <i class="fa fa-remove"></i> 删除
+      </a>
+      <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="billiard:table:export">
+        <i class="fa fa-download"></i> 导出
+      </a>
+    </div>
+
+    <div class="col-sm-12 select-table table-striped">
+      <table id="bootstrap-table"></table>
+    </div>
+  </div>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+  var editFlag = [[${@permission.hasPermi('billiard:table:edit')}]];
+  var removeFlag = [[${@permission.hasPermi('billiard:table:del')}]];
+  var datas = [[${@dict.getType('self_table_status')}]];
+  var tableType = [[${@dict.getType('self_table_type')}]];
+  var tableVip= [[${@dict.getType('self_table_vip')}]];
+  var prefix = ctx + "billiard/table";
+
+  $(function() {
+    var options = {
+      url: prefix + "/list",
+      createUrl: prefix + "/add",
+      updateUrl: prefix + "/edit/{id}",
+      removeUrl: prefix + "/remove",
+      exportUrl: prefix + "/export",
+      sortName: "tableId",
+      modalName: "桌台",
+      columns: [{
+        checkbox: true
+      },
+        {
+          field: 'tableId',
+          title: '桌台编号',
+          //隐藏不显示
+          visible: false
+        },
+        {
+          field: 'index', // 索引列
+          title: '序号',
+          formatter: function(value, row, index) {
+            return index + 1;
+          }
+        },
+        {
+          field: 'tableCode',
+          title: '桌台编码',
+          sortable: true
+        },
+        {
+          field: 'tableName',
+          title: '桌台名称',
+          sortable: true
+        },{
+          field: 'tableType',
+          title: '桌台类型',
+          formatter: function(value, row, index) {
+            return $.table.selectDictLabel(tableType, value);
+          }
+        },{
+          field: 'price',
+          title: '桌台单价',
+          sortable: true
+        },{
+          field: 'memberPaymentSettings',
+          title: '会员卡支付设置',
+          formatter: function(value, row, index) {
+            return $.table.selectDictLabel(tableVip, value);
+          }
+        },{
+          field: 'memberPrice',
+          title: '会员单价',
+          sortable: true
+        },
+        {
+          field: 'status',
+          title: '状态',
+          align: 'center',
+          formatter: function(value, row, index) {
+            return $.table.selectDictLabel(datas, value);
+          }
+        },
+        {
+          field: 'createdAt',
+          title: '创建时间',
+          sortable: true
+        },
+        {
+          title: '操作',
+          align: 'center',
+          formatter: function(value, row, index) {
+            var actions = [];
+            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.tableId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.tableId + '\')"><i class="fa fa-remove"></i>删除</a>');
+            return actions.join('');
+          }
+        }]
+    };
+    $.table.init(options);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfTableTopAlbumMapper">
+
+    <resultMap type="SelfTableTopAlbum" id="SelfTableTopAlbumResult">
+        <result property="albumId" column="album_id"/>
+        <result property="tableId" column="table_id"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="description" column="description"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <sql id="selectSelfTableTopAlbumVo">
+        select album_id, table_id, image_url, description, created_at
+        from self_table_top_album
+    </sql>
+
+    <select id="selectSelfTableTopAlbumList" parameterType="SelfTableTopAlbum" resultMap="SelfTableTopAlbumResult">
+        <include refid="selectSelfTableTopAlbumVo"/>
+        <where>
+            <if test="tableId != null ">and table_id = #{tableId}</if>
+            <if test="imageUrl != null  and imageUrl != ''">and image_url = #{imageUrl}</if>
+            <if test="description != null  and description != ''">and description = #{description}</if>
+            <if test="createdAt != null ">and created_at = #{createdAt}</if>
+        </where>
+    </select>
+
+    <select id="selectSelfTableTopAlbumByAlbumId" parameterType="Long" resultMap="SelfTableTopAlbumResult">
+        <include refid="selectSelfTableTopAlbumVo"/>
+        where album_id = #{albumId}
+    </select>
+
+    <insert id="insertSelfTableTopAlbum" parameterType="SelfTableTopAlbum" useGeneratedKeys="true"
+            keyProperty="albumId">
+        insert into self_table_top_album
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableId != null">table_id,</if>
+            <if test="imageUrl != null">image_url,</if>
+            <if test="description != null">description,</if>
+            <if test="createdAt != null">created_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableId != null">#{tableId},</if>
+            <if test="imageUrl != null">#{imageUrl},</if>
+            <if test="description != null">#{description},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelfTableTopAlbum" parameterType="SelfTableTopAlbum">
+        update self_table_top_album
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tableId != null">table_id = #{tableId},</if>
+            <if test="imageUrl != null">image_url = #{imageUrl},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where album_id = #{albumId}
+    </update>
+
+    <delete id="deleteSelfTableTopAlbumByAlbumId" parameterType="Long">
+        delete
+        from self_table_top_album
+        where album_id = #{albumId}
+    </delete>
+
+    <delete id="deleteSelfTableTopAlbumByAlbumIds" parameterType="String">
+        delete from self_table_top_album where album_id in
+        <foreach item="albumId" collection="array" open="(" separator="," close=")">
+            #{albumId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSelfTableTopAlbumByTableId" parameterType="String">
+        delete from self_table_top_album where table_id in
+        <foreach item="tableId" collection="array" open="(" separator="," close=")">
+            #{tableId}
+        </foreach>
+    </delete>
+
+</mapper>

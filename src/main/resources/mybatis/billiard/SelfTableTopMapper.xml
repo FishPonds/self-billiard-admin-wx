@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lingdu.project.billiard.mapper.SelfTableTopMapper">
+
+    <resultMap type="SelfTableTop" id="SelfTableTopResult">
+        <result property="tableId" column="table_id"/>
+        <result property="tableName" column="table_name"/>
+        <result property="tableCode" column="table_code"/>
+        <result property="selfStoreId" column="self_store_id"/>
+        <result property="tableType" column="table_type"/>
+        <result property="capacity" column="capacity"/>
+        <result property="status" column="status"/>
+        <result property="description" column="description"/>
+        <result property="price" column="price"/>
+        <result property="memberPaymentSettings" column="member_payment_settings"/>
+        <result property="memberPrice" column="member_price"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="notes" column="notes"/>
+    </resultMap>
+
+    <sql id="selectSelfTableTopVo">
+        select table_id,
+               table_name,
+               table_code,
+               self_store_id,
+               table_type,
+               capacity,
+               status,
+               description,
+               price,
+               member_payment_settings,
+               member_price,
+               created_at,
+               notes
+        from self_table_top
+    </sql>
+
+    <select id="selectSelfTableTopList" parameterType="SelfTableTop" resultMap="SelfTableTopResult">
+        <include refid="selectSelfTableTopVo"/>
+        <where>
+            <if test="tableName != null  and tableName != ''">and table_name like concat('%', #{tableName}, '%')</if>
+            <if test="tableCode != null  and tableCode != ''">and table_code like concat('%', #{tableCode}, '%')</if>
+            <if test="selfStoreId != null ">and self_store_id = #{selfStoreId}</if>
+            <if test="tableType != null  and tableType != ''">and table_type = #{tableType}</if>
+            <if test="capacity != null ">and capacity = #{capacity}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="description != null  and description != ''">and description = #{description}</if>
+            <if test="price != null ">and price = #{price}</if>
+            <if test="memberPaymentSettings != null ">and member_payment_settings = #{memberPaymentSettings}</if>
+            <if test="memberPrice != null ">and member_price = #{memberPrice}</if>
+            <if test="createdAt != null ">and created_at = #{createdAt}</if>
+            <if test="notes != null  and notes != ''">and notes = #{notes}</if>
+        </where>
+    </select>
+
+    <select id="selectSelfTableTopByTableId" parameterType="Long" resultMap="SelfTableTopResult">
+        <include refid="selectSelfTableTopVo"/>
+        where table_id = #{tableId}
+    </select>
+
+    <insert id="insertSelfTableTop" parameterType="SelfTableTop" useGeneratedKeys="true" keyProperty="tableId">
+        insert into self_table_top
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tableName != null and tableName != ''">table_name,</if>
+            <if test="tableCode != null and tableCode != ''">table_code,</if>
+            <if test="selfStoreId != null">self_store_id,</if>
+            <if test="tableType != null">table_type,</if>
+            <if test="capacity != null">capacity,</if>
+            <if test="status != null">status,</if>
+            <if test="description != null">description,</if>
+            <if test="price != null">price,</if>
+            <if test="memberPaymentSettings != null">member_payment_settings,</if>
+            <if test="memberPrice != null">member_price,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="notes != null">notes,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tableName != null and tableName != ''">#{tableName},</if>
+            <if test="tableCode != null and tableCode != ''">#{tableCode},</if>
+            <if test="selfStoreId != null">#{selfStoreId},</if>
+            <if test="tableType != null">#{tableType},</if>
+            <if test="capacity != null">#{capacity},</if>
+            <if test="status != null">#{status},</if>
+            <if test="description != null">#{description},</if>
+            <if test="price != null">#{price},</if>
+            <if test="memberPaymentSettings != null">#{memberPaymentSettings},</if>
+            <if test="memberPrice != null">#{memberPrice},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="notes != null">#{notes},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSelfTableTop" parameterType="SelfTableTop">
+        update self_table_top
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tableName != null and tableName != ''">table_name = #{tableName},</if>
+            <if test="tableCode != null and tableCode != ''">table_code = #{tableCode},</if>
+            <if test="selfStoreId != null">self_store_id = #{selfStoreId},</if>
+            <if test="tableType != null">table_type = #{tableType},</if>
+            <if test="capacity != null">capacity = #{capacity},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="memberPaymentSettings != null">member_payment_settings = #{memberPaymentSettings},</if>
+            <if test="memberPrice != null">member_price = #{memberPrice},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="notes != null">notes = #{notes},</if>
+        </trim>
+        where table_id = #{tableId}
+    </update>
+
+    <delete id="deleteSelfTableTopByTableIds" parameterType="String">
+        delete from self_table_top where table_id in
+        <foreach item="tableId" collection="array" open="(" separator="," close=")">
+            #{tableId}
+        </foreach>
+    </delete>
+
+    <select id="selectCountSelfTableTopByTableCode" parameterType="SelfTableTop" resultType="int">
+        SELECT COUNT(*) AS count_duplicates
+        FROM self_table_top
+        WHERE table_code = #{tableCode}
+          AND self_store_id = #{selfStoreId};
+    </select>
+</mapper>

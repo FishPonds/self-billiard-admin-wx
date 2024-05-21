@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改桌台数据')"/>
+    <th:block th:include="include :: jasny-bootstrap-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-table-edit" th:object="${selfTableTop}">
+        <input id="tableId" name="tableId" th:field="*{tableId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台名称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="tableName" id="tableName" th:field="*{tableName}"
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台编码：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="tableCode" id="tableCode" th:field="*{tableCode}" readonly
+                       required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台类型：</label>
+            <div class="col-sm-8">
+                <select class="form-control m-b" id="tableType" name="tableType"
+                        th:with="type=${@dict.getType('self_table_type')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                            th:field="*{tableType}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台单价：</label>
+            <div class="col-sm-8">
+                <div class="input-group m-b"><span class="input-group-addon">&yen;</span>
+                    <input type="text" class="form-control" id="price" name="price" th:field="*{price}" required> <span
+                            class="input-group-addon">元/小时</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">会员卡支付设置：</label>
+            <div class="col-sm-8">
+                <div class="radio-box" th:each="dict : ${@dict.getType('self_table_vip')}">
+                    <input type="radio" th:id="${dict.dictCode}" name="memberPaymentSettings" id="memberPaymentSettings"
+                           th:value="${dict.dictValue}"
+                           th:checked="${dict.default}" th:field="*{memberPaymentSettings}">
+                    <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                </div>
+                <i class="fa fa-info-circle"></i> 开启后将支持使用会员储值卡支付
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">会员单价：</label>
+            <div class="col-sm-8">
+                <div class="input-group m-b"><span class="input-group-addon">&yen;</span>
+                    <input type="text" class="form-control" id="memberPrice" name="memberPrice"
+                           th:field="*{memberPrice}" required> <span
+                            class="input-group-addon">元/小时</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">状态：</label>
+            <div class="col-sm-8">
+                <div class="radio-box" th:each="dict : ${@dict.getType('self_table_status')}">
+                    <input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}"
+                           th:checked="${dict.default}" th:field="*{status}">
+                    <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">容纳人数：</label>
+            <div class="col-sm-8">
+                <select class="form-control m-b" id="capacity" name="capacity"
+                        th:with="type=${@dict.getType('capacity')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                            th:field="*{capacity}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">桌台图片：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="hidden" name="images" id="images">
+                <div class="file-loading">
+                    <input id="multipleFile" name="files" type="file" multiple>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">桌台简介：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="description" id="description" th:field="*{description}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea id="notes" name="notes" th:field="*{notes}" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: jasny-bootstrap-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "billiard/table";
+    var existingImages = [];
+    $("#form-table-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            //判断桌台状态是否选中
+            if ($("input[name='status']:checked").val() == null) {
+                $.modal.msgWarning("请选择桌台状态");
+                return;
+            }
+            //判断会员卡支付设置是否选中
+            if ($("input[name='memberPaymentSettings']:checked").val() == null) {
+                $.modal.msgWarning("请选择会员卡支付设置");
+                return;
+            }
+            //判断桌台图片是否上传
+            if ($("#images").val() == "") {
+                $.modal.msgWarning("请上传桌台图片");
+                return;
+            }
+            $.operate.save(prefix + "/edit", $('#form-table-edit').serialize());
+        }
+    }
+
+    getTableAlbum();
+
+    // ajax获取桌台图片
+    function getTableAlbum() {
+        $.ajax({
+            type: "GET",
+            url: prefix + "/album/list/" + $("#tableId").val(),
+            success: function (data) {
+                if (data.code == web_status.SUCCESS) {
+                    var images = data.data;
+                    if (images != null && images.length > 0) {
+                        // 构建existingImages数组
+                        existingImages = images.map(function (image) {
+                            return {id: image.id, url: image.url};
+                        });
+                        // 将返回的图片地址赋值给隐藏域
+                        $("#images").val(existingImages.map(function (image) {
+                            return image.url;
+                        }).join(','));
+                        initializeFileInput(existingImages);
+                    } else {
+                        initializeFileInput([]);
+                    }
+                } else {
+                    $.modal.alertError(data.msg);
+                }
+            }
+        });
+    }
+
+
+    function initializeFileInput(existingImages) {
+        var initialPreview = [];
+        var initialPreviewConfig = [];
+
+        // 构建初始预览和预览配置
+        existingImages.forEach(function (image) {
+            initialPreview.push(image.url);
+            initialPreviewConfig.push({
+                caption: "", // 不显示文件名
+                url1: image.url, // 文件路径
+                key: image.id // 设置唯一键，用于删除操作
+            });
+        });
+
+        // 计算可上传的最大文件数量
+        var maxFileCount = 3 - existingImages.length;
+
+        var $fileInput = $("#multipleFile");
+
+        $fileInput.fileinput({
+            initialPreview: initialPreview, // 初始化时预览的图片
+            initialPreviewAsData: true, // 以数据形式预览
+            initialPreviewConfig: initialPreviewConfig, // 初始预览配置
+            overwriteInitial: false, // 不覆盖初始预览图片
+            deleteUrl: '#', // 删除文件的 URL
+            uploadUrl: ctx + 'common/uploadTableFiles', // 上传 URL
+            uploadAsync: false, // 同步上传
+            allowedFileExtensions: ['jpg', 'gif', 'png'], // 接收的文件后缀
+            allowedFileTypes: ['image'], // 上传文件类型
+            maxFileCount: maxFileCount, // 最大文件数量
+            maxFileSize: 10240, // 最大文件大小（单位：KB）
+            previewSettings: {
+                image: {width: "200px", height: "200px"} // 预览图片的尺寸
+            }
+        })
+            .on('filebatchuploadsuccess', function (event, data, previewId, index) {
+                var rsp = data.response;
+                var existingImages = $("#images").val().split(','); // 获取已有图片路径
+                existingImages = existingImages.filter(function (image) {
+                    return image != ""; // 去除空字符串，防止出现空字符串
+                });
+                existingImages = existingImages.concat(rsp.urls); // 合并新上传的图片路径
+                if (existingImages.length > 3) {
+                    existingImages = existingImages.slice(0, 3); // 确保总数不超过3张
+                }
+                $("#images").val(existingImages.join(',')); // 更新隐藏域的值
+            })
+            .on('filedeleted', function (event, key, jqXHR, data, caption) {
+                // 查找被删除的文件信息
+                var deletedFile = initialPreviewConfig.find(function (config) {
+                    return config.key == key;
+                });
+                if (deletedFile) {
+                    // 向后端发送删除图片的请求
+                    $.ajax({
+                        type: 'POST',
+                        url: prefix + '/album/remove',
+                        data: {"ids": key},
+                        success: function (response) {
+                            if (response.code === web_status.SUCCESS) {
+                                $.modal.msgSuccess("图片删除成功");
+                                // 删除成功后，重新加载图片
+                                var existingImages = $("#images").val().split(',');
+                                existingImages = existingImages.filter(function (imageUrl) {
+                                    return imageUrl != deletedFile.url1; // 从现有图片路径中删除已删除的图片
+                                });
+                                $("#images").val(existingImages.join(',')); // 更新隐藏域的值
+                            } else {
+                                $.modal.alertError(response.msg);
+                            }
+                        },
+                        error: function () {
+                            $.modal.alertError("图片删除失败，请重试");
+                        }
+                    });
+                }
+            })
+            .on('filebeforeupload', function (event, data, previewId, index) {
+                var existingImages = $("#images").val().split(',').filter(function (image) {
+                    return image != "";
+                });
+
+                var totalImagesCount = existingImages.length + data.files.length;
+
+                if (totalImagesCount > 3) {
+                    $.modal.alertError("上传图片总数不能超过三张！");
+                    return {
+                        message: "上传图片总数不能超过三张！", // Will be shown in Bootstrap Notify
+                        data: {key: 'too-many-files'} // Key data to return
+                    };
+                }
+            });
+    }
+
+
+</script>
+</body>
+</html>

@@ -109,7 +109,7 @@
         left join self_role_menu rm on m.self_menu_id = rm.self_menu_id
         left join self_user_role ur on rm.self_role_id = ur.self_role_id
         LEFT JOIN self_role ro on ur.self_role_id = ro.self_role_id
-        where ur.self_user_id = #{selfUserId}
+        where ur.self_user_id = #{selfUserId} AND m.menu_type in ('M', 'C') AND m.status = 0
         order by m.parent_id, m.order_num
     </select>
 

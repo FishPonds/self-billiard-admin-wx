@@ -30,6 +30,15 @@ public class SelfStorePhotoAlbum extends BaseEntity
     @Excel(name = "门店Key")
     private String storeKey;
 
+    public SelfStorePhotoAlbum()
+    {
+    }
+
+    public SelfStorePhotoAlbum(Long storeId)
+    {
+        this.storeId = storeId;
+    }
+
     public void setAlbumId(Long albumId) 
     {
         this.albumId = albumId;

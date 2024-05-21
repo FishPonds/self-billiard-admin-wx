@@ -46,7 +46,7 @@
             <div th:if="${storeList.size()==0}" class="item-create-box" style="color: red">
                 暂无门店
             </div>
-            <div class="item" th:each="store : ${storeList}">
+            <div class="item" th:each="store : ${storeList}" th:data-store-id="${store.storeId}">
                 <div class="item-head">
                     <span th:text="${store.storeName}"></span>
                     <div class="item-create">创建者</div>
@@ -59,6 +59,9 @@
         </div>
     </div>
 </div>
+<form id="storeForm" action="/index" method="post" style="display:none;">
+    <input type="hidden" id="selectedStoreId" name="selectedStoreId" value="">
+</form>
 <script th:inline="javascript">
     // 记录上一次选中的div，并且不受刷新影响
     var shopList = document.getElementById('shopList');
@@ -78,7 +81,14 @@
             }
             target.style.borderColor = '#ff0000';
             localStorage.setItem('selectedStore', target.innerText);
-            window.location.href = '/index';
+            var selectedStoreId = target.getAttribute('data-store-id');
+            localStorage.setItem('selectedStoreId', selectedStoreId);
+
+            // 将选中的商店ID存储在隐藏字段中
+            document.getElementById('selectedStoreId').value = selectedStoreId;
+
+            // 提交表单
+            document.getElementById('storeForm').submit();
         }
     });
 

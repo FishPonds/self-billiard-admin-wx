@@ -2,6 +2,7 @@ package com.lingdu.project.billiard.service;
 
 
 import com.lingdu.project.billiard.domain.SelfStoreInformation;
+import com.lingdu.project.billiard.domain.SelfStoreVO;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface ISelfStoreInformationService
      * @param storeId 自助台球系统门店信息主键
      * @return 自助台球系统门店信息
      */
-    public SelfStoreInformation selectSelfStoreInformationByStoreId(Long storeId);
+    public SelfStoreVO selectSelfStoreInformationByStoreId(Long storeId);
 
     /**
      * 查询自助台球系统门店信息列表

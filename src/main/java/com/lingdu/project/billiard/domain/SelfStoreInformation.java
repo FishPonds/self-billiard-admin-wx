@@ -172,6 +172,19 @@ public class SelfStoreInformation extends BaseEntity {
      */
     private List<SelfStorePhotoAlbum> selfStorePhotoAlbums;
 
+    /**
+     * 门店相册url数组
+     */
+    private String[] photoUrls;
+
+    public String[] getPhotoUrls() {
+        return photoUrls;
+    }
+
+    public void setPhotoUrls(String[] photoUrls) {
+        this.photoUrls = photoUrls;
+    }
+
     public List<SelfStorePhotoAlbum> getSelfStorePhotoAlbums() {
         return selfStorePhotoAlbums;
     }

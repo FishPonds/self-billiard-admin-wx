@@ -206,12 +206,16 @@
 								<i class="fa fa-user"></i> 个人中心</a>
 							</li>
 							<li>
-								<a onclick="resetPwd()">
-								<i class="fa fa-key"></i> 修改密码</a>
+								<a th:href="@{/store-information}" class="menuItem noactive">
+									<i class="fa fa-key"></i> 门店中心</a>
 							</li>
 							<li>
 								<a onclick="changeStore()">
 									<i class="fa fa-key"></i> 切换门店</a>
+							</li>
+							<li>
+								<a onclick="resetPwd()">
+								<i class="fa fa-key"></i> 修改密码</a>
 							</li>
 							<li>
 								<a onclick="switchSkin()">
@@ -303,6 +307,11 @@ function resetPwd() {
 /* 切换门店 */
 function changeStore() {
 	location.href = ctx + 'store-index';
+}
+
+/* 门店中心 */
+function storeCenter() {
+	location.href = ctx + 'store-information';
 }
 
 /* 切换主题 */
