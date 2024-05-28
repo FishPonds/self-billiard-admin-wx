@@ -8,6 +8,8 @@ import com.lingdu.project.billiard.mapper.SelfTableTopMapper;
 import com.lingdu.project.billiard.service.ISelfStoreInformationService;
 import com.lingdu.project.billiard.service.ISelfTableTopAlbumService;
 import com.lingdu.project.billiard.service.ISelfTableTopService;
+import com.lingdu.project.system.dict.mapper.DictTypeMapper;
+import com.lingdu.project.system.dict.utils.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,7 @@ public class SelfStoreInformationServiceImpl implements ISelfStoreInformationSer
      */
     @Override
     public SelfStoreVO selectSelfStoreInformationByStoreId(Long storeId) {
+        //查询字典数据
 
         // 查询门店信息
         SelfStoreInformation selfStoreInformation = selfStoreInformationMapper.selectSelfStoreInformationByStoreId(storeId);
@@ -59,6 +62,7 @@ public class SelfStoreInformationServiceImpl implements ISelfStoreInformationSer
         selfTableTops.sort(Comparator.comparing(SelfTableTop::getTableType));
         //根据桌台id查询桌台图片
         selfTableTops.forEach(selfTableTop -> {
+            selfTableTop.setStatusName(DictUtils.getDictLabel("self_table_status", selfTableTop.getTableType()));
             List<SelfTableTopAlbum> selfTableTopAlbums = selfTableTopAlbumMapper.selectSelfTableTopAlbumList(new SelfTableTopAlbum(selfTableTop.getTableId()));
             if (selfTableTopAlbums != null && !selfTableTopAlbums.isEmpty()) {
                 String[] tablePhotoUrls = selfTableTopAlbums.stream()

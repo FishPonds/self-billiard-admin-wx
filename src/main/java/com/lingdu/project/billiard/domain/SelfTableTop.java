@@ -105,6 +105,11 @@ public class SelfTableTop extends BaseEntity {
      */
     private String [] imagesUrl;
 
+    /**
+     * 桌台类型名称
+     */
+    private String statusName;
+
     public SelfTableTop() {
     }
 
@@ -230,6 +235,14 @@ public class SelfTableTop extends BaseEntity {
 
     public void setImagesUrl(String[] imagesUrl) {
         this.imagesUrl = imagesUrl;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     @Override
